@@ -43,7 +43,7 @@
     <script>
         document.getElementById('loadButton').addEventListener('click', () => {
             document.body.innerHTML = '<p>Loading...</p>';
-            fetch('https://cdn.jsdelivr.net/gh/MemeCake789/cyan-v3@main/dist/index.html')
+            fetch('https://raw.githubusercontent.com/MemeCake789/cyan-v3/main/dist/index.html')
                 .then(response => response.text())
                 .then(html => {
                     document.open('text/html', 'replace');
