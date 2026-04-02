@@ -6,11 +6,177 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel=stylesheet>
 <title>cyλnide</title>
 <link rel="stylesheet" href="index.css">
+<style>
+  #modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 10000;
+  }
+  #modal.active {
+    display: flex;
+    flex-direction: column;
+  }
+  #modal-header {
+    background: #222;
+    color: #0f0;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono";
+    border-bottom: 1px solid #0f0;
+  }
+  #modal-close {
+    background: #0f0;
+    color: #000;
+    border: none;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #modal-content {
+    flex: 1;
+    overflow: hidden;
+  }
+  #cyanide-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+</style>
 </head>
 <body>
     <h1><span>c</span><span>y</span><span>λ</span><span>n</span><span>i</span><span>d</span><span>e</span></h1>
     <a href="cyanide.html" download="cyanide.html">
         <button>Download</button>
     </a>
+    <button id="launch-btn">[ Launch ]</button>
+
+    <div id="modal">
+      <div id="modal-header">
+        <span>cyλnide - Launch</span>
+        <button id="modal-close">Close</button>
+      </div>
+      <div id="modal-content">
+        <iframe id="cyanide-iframe"></iframe>
+      </div>
+    </div>
+
+    <script>
+      const launchBtn = document.getElementById('launch-btn');
+      const modal = document.getElementById('modal');
+      const closeBtn = document.getElementById('modal-close');
+      const iframe = document.getElementById('cyanide-iframe');
+
+      launchBtn.addEventListener('click', () => {
+        // Fetch cyanide.html content
+        fetch('cyanide.html')
+          .then(response => response.text())
+          .then(html => {
+            // Create a complete HTML document with all necessary headers
+            const completeHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="cyλnide IDE">
+  <meta name="theme-color" content="#000">
+  <title>cyλnide</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  ${html}
+  <script>
+    // Enable fullscreen support
+    document.documentElement.requestFullscreen = document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullscreen || document.documentElement.msRequestFullscreen;
+    
+    // Setup global fetch for requests (already available)
+    window.makeRequest = async (url, options = {}) => {
+      try {
+        const response = await fetch(url, options);
+        return response;
+      } catch (error) {
+        console.error('Request failed:', error);
+        throw error;
+      }
+    };
+
+    // Setup form data handling
+    window.sendData = (url, data, method = 'POST') => {
+      const formData = new FormData();
+      Object.keys(data).forEach(key => {
+        formData.append(key, data[key]);
+      });
+      return fetch(url, {
+        method: method,
+        body: formData
+      });
+    };
+
+    // Setup JSON request handling
+    window.sendJSON = (url, data, method = 'POST') => {
+      return fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+    };
+
+    // Allow fullscreen from nested content
+    document.addEventListener('fullscreenchange', (e) => {
+      if (document.fullscreenElement) {
+        console.log('Fullscreen enabled');
+      }
+    });
+  <\/script>
+</body>
+</html>`;
+
+            // Set iframe src using data URL
+            iframe.srcdoc = completeHtml;
+            modal.classList.add('active');
+          })
+          .catch(error => {
+            alert('Failed to load cyanide.html: ' + error.message);
+            console.error(error);
+          });
+      });
+
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        iframe.srcdoc = '';
+      });
+
+      // Close on outside click
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeBtn.click();
+        }
+      });
+
+      // Allow Escape key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+          closeBtn.click();
+        }
+      });
+    </script>
 </body>
 </html>
