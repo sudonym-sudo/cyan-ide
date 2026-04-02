@@ -4,15 +4,25 @@
 <link rel=icon href=/favicon.png>
 <meta name=viewport content="width=device-width,initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel=stylesheet>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <title>cyλnide</title>
 <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <h1><span>c</span><span>y</span><span>λ</span><span>n</span><span>i</span><span>d</span><span>e</span></h1>
-    <a href="cyanide.html" download="cyanide.html">
-        <button>Download</button>
-    </a>
-    <button onclick="launchCyanide()">Launch</button>
+    
+    <div style="display:flex;gap:1rem;justify-content:center;margin-top:2rem">
+      <a href="cyanide.html" download="cyanide.html" style="text-decoration:none">
+        <button style="display:flex;align-items:center;gap:8px">
+          <span class="material-icons">download</span>
+          Download
+        </button>
+      </a>
+      <button onclick="launchCyanide()" style="display:flex;align-items:center;gap:8px">
+        <span class="material-icons">launch</span>
+        Launch
+      </button>
+    </div>
 
 <script>
 function launchCyanide() {
