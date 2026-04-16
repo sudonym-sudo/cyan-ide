@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proxy Engine</title>
+    <style>body { margin: 0; background: #000; }</style>
+</head>
+<body>
+    <script>
+        const targetUrl = window.location.hash.substring(1) || "https://google.com";
+        const proxyUrl = "https://reds-exploit-corner.examprepare.help/embed.html#" + targetUrl;
+        
+        // redirect to the actual proxy
+        window.location.href = proxyUrl;
+    </script>
+</body>
+</html>
